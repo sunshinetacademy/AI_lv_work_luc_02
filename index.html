@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المحاضرة الثانية — Claude في الشغل الفعلي | Sunshine T Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--cream:#fdfaf3;--dark:#1a2847;--blue:#2c3e50;--gold:#c9a961;--gold-light:#f5e6c4;
+--bg:#f8f9fa;--text:#1a1a1a;--muted:#6c757d;--success:#27ae60;--danger:#c0392b;
+--warning:#e67e22;--info:#3498db;--border:#e8e3d3;--code-bg:#1a2847;--code-text:#e6c887;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Cairo',sans-serif;background:var(--cream);color:var(--text);line-height:1.85;font-size:17px}
+
+.cover{background:linear-gradient(160deg,#0f1b30 0%,#1a2847 40%,#2c3e50 100%);color:#fff;padding:70px 40px 55px;position:relative;overflow:hidden}
+.cover::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 75% 15%,rgba(201,169,97,.12),transparent 55%),radial-gradient(ellipse at 25% 85%,rgba(201,169,97,.08),transparent 55%)}
+.cover-inner{max-width:1100px;margin:0 auto;position:relative;z-index:2}
+.cover-badge{display:inline-block;background:rgba(201,169,97,.15);color:var(--gold-light);padding:6px 18px;border-radius:24px;font-size:13px;font-weight:700;border:1px solid rgba(201,169,97,.3);margin-bottom:18px;letter-spacing:.5px}
+.cover h1{font-size:52px;font-weight:900;line-height:1.25;margin-bottom:16px;max-width:850px}
+.cover h1 .hl{color:var(--gold)}
+.cover-sub{font-size:21px;color:rgba(255,255,255,.82);max-width:780px;line-height:1.65;margin-bottom:36px}
+.cover-meta{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--gold-light);margin-bottom:32px;flex-wrap:wrap}
+.cover-meta .dot{width:4px;height:4px;background:var(--gold);border-radius:50%}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:36px;max-width:850px}
+.mini-card{background:rgba(255,255,255,.07);backdrop-filter:blur(8px);padding:14px 18px;border-radius:10px;border:1px solid rgba(255,255,255,.1)}
+.mini-card .lbl{font-size:11px;color:var(--gold-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.mini-card .val{font-size:15px;font-weight:700}
+.toc-box{background:rgba(255,255,255,.04);border:1px solid rgba(201,169,97,.2);border-radius:14px;padding:22px 26px;max-width:850px}
+.toc-title{font-size:13px;color:var(--gold);font-weight:700;margin-bottom:14px;letter-spacing:1px;text-transform:uppercase}
+.toc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px 22px;list-style:none}
+.toc-grid li{font-size:14px;padding:7px 0;display:flex;align-items:center;gap:10px;color:rgba(255,255,255,.82);cursor:pointer;transition:.3s}
+.toc-grid li:hover{color:var(--gold);transform:translateX(-4px)}
+.toc-n{color:var(--gold);font-weight:900;font-size:16px;min-width:24px}
+
+.main{max-width:960px;margin:0 auto;padding:55px 28px 20px}
+.sec{margin-bottom:72px;scroll-margin-top:24px}
+.sec-head{display:flex;align-items:center;gap:18px;margin-bottom:26px;padding-bottom:18px;border-bottom:2px solid var(--border);position:relative}
+.sec-head::after{content:'';position:absolute;bottom:-2px;right:0;width:72px;height:2px;background:var(--gold)}
+.sec-num{font-size:44px;font-weight:900;color:var(--gold);line-height:1;min-width:72px}
+.sec-head h2{font-size:30px;font-weight:900;color:var(--dark);margin-bottom:4px;line-height:1.3}
+.sec-sub{font-size:15px;color:var(--muted);font-weight:600}
+.intro{font-size:17px;line-height:2;margin-bottom:22px;color:var(--text)}
+.intro strong{color:var(--dark)}
+
+.golden{background:linear-gradient(135deg,#fdf8ec,#f8edce);border-right:5px solid var(--gold);border-radius:12px;padding:26px 30px;margin:28px 0;position:relative;box-shadow:0 4px 18px rgba(201,169,97,.13)}
+.golden::before{content:'💡 القاعدة الذهبية';position:absolute;top:-13px;right:22px;background:var(--gold);color:#fff;padding:5px 16px;border-radius:20px;font-size:12px;font-weight:900;box-shadow:0 2px 8px rgba(201,169,97,.3)}
+.golden p{font-size:18px;line-height:1.9;color:var(--dark);font-weight:600;margin-top:8px}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;margin:26px 0}
+.card{background:#fff;border:1px solid var(--border);border-radius:13px;padding:24px;transition:.3s;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;right:0;width:4px;height:100%;background:var(--gold);transform:scaleY(0);transition:.3s;transform-origin:bottom}
+.card:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(26,40,71,.08);border-color:var(--gold)}
+.card:hover::before{transform:scaleY(1)}
+.card-icon{width:48px;height:48px;background:var(--gold-light);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--gold);margin-bottom:14px}
+.card h4{font-size:17px;color:var(--dark);margin-bottom:8px;font-weight:900}
+.card p{font-size:14px;color:var(--muted);line-height:1.7}
+
+.box{padding:18px 22px;border-radius:10px;margin:22px 0;border-right:4px solid}
+.box h5{font-size:14px;margin-bottom:7px;display:flex;align-items:center;gap:8px;font-weight:900}
+.box p{font-size:15px;line-height:1.8;color:var(--dark)}
+.box-tip{background:#e8f5e9;border-color:var(--success)}.box-tip h5{color:var(--success)}
+.box-warn{background:#fef3e7;border-color:var(--warning)}.box-warn h5{color:var(--warning)}
+.box-danger{background:#fdecea;border-color:var(--danger)}.box-danger h5{color:var(--danger)}
+.box-info{background:#e3f2fd;border-color:var(--info)}.box-info h5{color:var(--info)}
+.box-security{background:#fff3cd;border-color:var(--warning)}.box-security h5{color:var(--warning)}
+
+.term{background:#fff;border:1px solid var(--border);border-radius:11px;padding:20px 24px;margin:14px 0;display:flex;gap:18px;align-items:flex-start;transition:.3s}
+.term:hover{border-color:var(--gold);box-shadow:0 5px 16px rgba(201,169,97,.1)}
+.term-n{min-width:150px;font-weight:900;font-size:16px;color:var(--gold)}
+.term-d{flex:1;font-size:15px;line-height:1.8;color:var(--text)}
+.term-d code{background:var(--gold-light);padding:1px 7px;border-radius:4px;color:var(--dark);font-family:'JetBrains Mono',monospace;font-size:13px}
+
+.tbl{width:100%;border-collapse:collapse;margin:22px 0;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 3px 14px rgba(0,0,0,.04)}
+.tbl thead{background:linear-gradient(135deg,var(--dark),var(--blue));color:#fff}
+.tbl th{padding:14px 18px;text-align:right;font-weight:900;font-size:14px;letter-spacing:.4px}
+.tbl td{padding:13px 18px;border-bottom:1px solid var(--border);font-size:14px;line-height:1.6}
+.tbl tbody tr:last-child td{border-bottom:none}
+.tbl tbody tr:hover{background:var(--gold-light)}
+
+.steps{counter-reset:st;list-style:none;margin:22px 0}
+.steps li{counter-increment:st;padding:16px 18px 16px 0;padding-right:66px;position:relative;background:#fff;margin-bottom:10px;border-radius:10px;border:1px solid var(--border);font-size:15px;line-height:1.8;transition:.3s}
+.steps li:hover{border-color:var(--gold);box-shadow:0 4px 12px rgba(201,169,97,.12)}
+.steps li::before{content:counter(st);position:absolute;right:16px;top:50%;transform:translateY(-50%);width:36px;height:36px;background:var(--gold);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px}
+
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:22px 0}
+.cmp-side{padding:24px;border-radius:12px;border:2px solid;position:relative}
+.cmp-side.ok{background:#f0f9f4;border-color:var(--success)}
+.cmp-side.no{background:#fdf2f2;border-color:var(--danger)}
+.cmp-badge{position:absolute;top:-13px;right:18px;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:900;color:#fff}
+.cmp-side.ok .cmp-badge{background:var(--success)}
+.cmp-side.no .cmp-badge{background:var(--danger)}
+.cmp-side h4{font-size:17px;margin-bottom:14px;margin-top:6px;color:var(--dark);font-weight:900}
+.cmp-side ul{list-style:none}
+.cmp-side li{padding:6px 0;padding-right:26px;position:relative;font-size:14px;line-height:1.7}
+.cmp-side.ok li::before{content:'✅';position:absolute;right:0;top:6px}
+.cmp-side.no li::before{content:'❌';position:absolute;right:0;top:6px}
+
+.ex{background:#fff;border:1px solid var(--border);border-radius:13px;padding:24px;margin:22px 0;box-shadow:0 3px 14px rgba(0,0,0,.03)}
+.ex-head{display:flex;align-items:center;gap:10px;padding-bottom:14px;margin-bottom:18px;border-bottom:2px dashed var(--border)}
+.ex-tag{background:var(--gold);color:#fff;padding:5px 12px;border-radius:7px;font-weight:900;font-size:13px}
+.ex-head h4{font-size:17px;color:var(--dark);font-weight:900}
+.ex-scene{background:var(--cream);padding:12px 16px;border-radius:8px;margin-bottom:14px;font-size:14px;line-height:1.7}
+.ex-scene strong{color:var(--gold)}
+.ex-result{background:#f0f9f4;border-right:3px solid var(--success);padding:12px 16px;border-radius:8px;margin-top:14px;font-size:14px;line-height:1.7;color:var(--dark)}
+
+.sandbox{background:var(--code-bg);color:var(--code-text);padding:20px 22px;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:14px;line-height:1.9;margin:14px 0;direction:ltr;text-align:left;border-right:4px solid var(--gold);white-space:pre-wrap;position:relative;overflow-x:auto}
+.sandbox .tag{color:#f59e0b;font-weight:700}
+.sandbox .c{color:#ecf0f1}
+.sandbox .kw{color:#38bdf8}
+.sandbox .str{color:#86efac}
+.sandbox-copy{position:absolute;top:8px;left:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:5px 12px;border-radius:6px;font-size:11px;cursor:pointer;font-family:'Cairo',sans-serif;transition:.3s}
+.sandbox-copy:hover{background:var(--gold);border-color:var(--gold)}
+
+.drill{background:linear-gradient(135deg,var(--dark),var(--blue));color:#fff;padding:26px 30px;border-radius:13px;margin:28px 0;position:relative;overflow:hidden}
+.drill::before{content:'';position:absolute;top:-40px;left:-40px;width:130px;height:130px;background:radial-gradient(circle,rgba(201,169,97,.2),transparent)}
+.drill-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;position:relative;z-index:2;flex-wrap:wrap;gap:10px}
+.drill-head h4{font-size:20px;font-weight:900;display:flex;align-items:center;gap:8px}
+.time-badge{background:var(--gold);color:#fff;padding:5px 14px;border-radius:20px;font-weight:700;font-size:13px;display:inline-flex;align-items:center;gap:5px}
+.drill ol{list-style:decimal;padding-right:22px;position:relative;z-index:2}
+.drill li{padding:5px 0;font-size:15px;line-height:1.8}
+
+.glossary{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px;margin:22px 0}
+.g-item{background:#fff;border:1px solid var(--border);border-radius:10px;padding:16px 18px;transition:.3s}
+.g-item:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 5px 14px rgba(201,169,97,.08)}
+.g-term{color:var(--gold);font-weight:900;font-size:15px;margin-bottom:6px;display:flex;align-items:center;gap:7px}
+.g-ar{font-size:13px;color:var(--muted);margin-bottom:5px;font-style:italic}
+.g-def{font-size:13px;line-height:1.7;color:var(--text)}
+
+.quiz{background:#fff;border-radius:13px;padding:26px;margin:26px 0;border:1px solid var(--border)}
+.quiz h4{font-size:20px;color:var(--dark);margin-bottom:18px;font-weight:900;display:flex;align-items:center;gap:8px}
+.quiz-q{background:var(--cream);padding:14px 18px;border-radius:9px;margin:10px 0;border-right:3px solid var(--gold);font-size:15px;line-height:1.8}
+.quiz-q b{color:var(--gold);margin-left:8px}
+
+.hw{background:linear-gradient(135deg,#fdf8ec,#f8edce);border:2px solid var(--gold);border-radius:13px;padding:28px;margin:28px 0}
+.hw h4{font-size:20px;color:var(--dark);margin-bottom:18px;font-weight:900;display:flex;align-items:center;gap:8px}
+.hw-list{list-style:none}
+.hw-list li{padding:11px 0;padding-right:34px;position:relative;font-size:15px;line-height:1.8;border-bottom:1px dashed var(--border)}
+.hw-list li:last-child{border-bottom:none}
+.hw-list li::before{content:'☐';position:absolute;right:0;top:11px;font-size:18px;color:var(--gold)}
+
+.footer{background:linear-gradient(135deg,var(--dark),var(--blue));color:#fff;padding:44px 36px 26px;margin-top:72px}
+.footer-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:36px;margin-bottom:26px}
+.footer h5{color:var(--gold);font-size:15px;margin-bottom:14px;font-weight:900}
+.footer p,.footer a{color:rgba(255,255,255,.78);font-size:14px;line-height:1.9;text-decoration:none;display:block;transition:.3s}
+.footer a:hover{color:var(--gold)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:20px;text-align:center;color:rgba(255,255,255,.55);font-size:13px}
+.footer-bottom .brand{color:var(--gold);font-weight:700}
+
+@media(max-width:768px){
+.cover h1{font-size:32px}.cover-sub{font-size:17px}.toc-grid{grid-template-columns:1fr}
+.sec-num{font-size:32px;min-width:52px}.sec-head h2{font-size:22px}
+.cmp{grid-template-columns:1fr}.main{padding:28px 16px 10px}
+.term{flex-direction:column;gap:6px}.term-n{min-width:auto}
+}
+@media print{.cover{break-after:page}.sec{break-inside:avoid}.drill,.golden{break-inside:avoid}}
+</style>
+</head>
+<body>
+
+<!-- ========== COVER ========== -->
+<section class="cover" id="s01">
+<div class="cover-inner">
+  <div class="cover-meta">
+    <span>Sunshine T Academy</span><span class="dot"></span>
+    <span>AI Automation for Professionals</span><span class="dot"></span>
+    <span>المحاضرة ٢ من ٦</span>
+  </div>
+  <span class="cover-badge">من النظرية إلى التطبيق الفعلي</span>
+  <h1>Claude في الشغل الفعلي<br><span class="hl">ملفات وداتا حقيقية</span></h1>
+  <p class="cover-sub">من رفع أول ملف Excel على Claude، لحد ما يبقى عندك Project كامل بشغلك بيشتغل تلقائياً — المحاضرة دي هتحوّل الـ AI من أداة تجربة لنظام شغل حقيقي.</p>
+  <div class="info-grid">
+    <div class="mini-card"><div class="lbl">المدة</div><div class="val">⏱ ساعتان</div></div>
+    <div class="mini-card"><div class="lbl">المستوى</div><div class="val">مبتدئ → متوسط</div></div>
+    <div class="mini-card"><div class="lbl">الأدوات</div><div class="val">Claude AI · Excel</div></div>
+    <div class="mini-card"><div class="lbl">المدرب</div><div class="val">م. أحمد</div></div>
+  </div>
+  <div class="toc-box">
+    <div class="toc-title">جدول المحتويات — ١٠ محاور</div>
+    <ul class="toc-grid">
+      <li><span class="toc-n">٠١</span> الغلاف</li>
+      <li><span class="toc-n">٠٢</span> ليه الموضوع ده ضروري؟</li>
+      <li><span class="toc-n">٠٣</span> إزاي Claude بيقرا الملفات + Table</li>
+      <li><span class="toc-n">٠٤</span> ⚠️ Hallucination + أمان البيانات</li>
+      <li><span class="toc-n">٠٥</span> جملة الأمان + Demo</li>
+      <li><span class="toc-n">٠٦</span> تمرين عملي</li>
+      <li><span class="toc-n">٠٧</span> المرجع السريع</li>
+      <li><span class="toc-n">٠٨</span> قاموس المصطلحات</li>
+      <li><span class="toc-n">٠٩</span> Free vs Paid + توفير التوكنز</li>
+      <li><span class="toc-n">١٠</span> التدريب الختامي والواجب</li>
+    </ul>
+  </div>
+</div>
+</section>
+
+<div class="main">
+
+<!-- ========== 02 ========== -->
+<section class="sec" id="s02">
+<div class="sec-head"><div class="sec-num">٠٢</div><div><h2>ليه الموضوع ده ضروري لموظف زيك؟</h2><div class="sec-sub">تأسيس الدافع قبل الشرح التقني</div></div></div>
+
+<p class="intro">في المحاضرة الأولى اتعلمنا إزاي نكتب Prompt صح. النهارده هننقل نقلة كبيرة: <strong>هنخلي Claude يشتغل على ملفاتك الفعلية</strong> — ملفات Excel اللي فيها فواتير، قراءات عدادات، شكاوى عملاء.</p>
+<p class="intro">تخيل إنك كل يوم بتفتح ملف فيه <strong>500 صف</strong> وبتقعد ساعة تفلتر وتنسخ. النهارده هنشوف إزاي Claude يعملها في <strong>30 ثانية</strong>.</p>
+
+<div class="golden"><p>المحترف مش اللي بيشتغل أكتر، اللي بيخلّي الأداة تشتغل بدلوه. كل ملف بتفتحه يدوياً = 15 دقيقة. لو 10 ملفات يومياً = 2.5 ساعة ضايعة. في الشهر = 55 ساعة!</p></div>
+
+<div class="cards">
+  <div class="card"><div class="card-icon">📊</div><h4>فواتير الاستهلاك</h4><p>استخراج العملاء المتأخرين وحساب الإجماليات من ملف فيه مئات الصفوف.</p></div>
+  <div class="card"><div class="card-icon">🔢</div><h4>قراءات العدادات</h4><p>مقارنة قراءات الشهر الحالي بالماضي وتحديد الاستهلاك غير الطبيعي.</p></div>
+  <div class="card"><div class="card-icon">🛠️</div><h4>تقارير الصيانة</h4><p>تصنيف الأعطال حسب النوع والمنطقة واستخراج اللي محتاج متابعة عاجلة.</p></div>
+  <div class="card"><div class="card-icon">📧</div><h4>شكاوى العملاء</h4><p>تلخيص إيميلات الشكاوى واستخراج رقم الحساب ونوع المشكلة في جدول.</p></div>
+</div>
+</section>
+
+<!-- ========== 03 ========== -->
+<section class="sec" id="s03">
+<div class="sec-head"><div class="sec-num">٠٣</div><div><h2>إزاي Claude بيقرا الملفات + ما هو Table؟</h2><div class="sec-sub">فهم الأساس قبل الرفع — ١٥ دقيقة</div></div></div>
+
+<p class="intro">Claude مش بس Chatbot — هو <strong>محلل بيانات</strong>. بيقدر يفتح Excel، يفهم العناوين، يعرف العلاقة بين الأعمدة، ويستخرج اللي إنت عايزه. بس فيه شرط: <strong>الملف لازم يكون منظم</strong>.</p>
+
+<div class="term"><div class="term-n">Knowledge</div><div class="term-d"><strong>الملفات المرفوعة.</strong> لما بترفع ملف على Claude، بيقرأه وبيفهم هيكله. <code>.xlsx</code> أو <code>.csv</code> أو <code>.pdf</code>.</div></div>
+<div class="term"><div class="term-n">Header Row</div><div class="term-d"><strong>صف العناوين.</strong> أول صف فيه أسماء الأعمدة. Claude بيفهمه تلقائياً.</div></div>
+<div class="term"><div class="term-n">Column Reference</div><div class="term-d"><strong>الإشارة للعمود.</strong> لما تقول <code>"عمود المبلغ"</code>، Claude بيفهم العمود اللي عنوانه "المبلغ".</div></div>
+
+<h3 style="font-size:20px;margin:28px 0 14px;color:var(--dark)">⚡ Range vs Table — الفرق اللي بيغير كل حاجة</h3>
+
+<div class="cmp">
+  <div class="cmp-side no">
+    <span class="cmp-badge">Range ❌</span>
+    <h4>خلايا عادية</h4>
+    <ul>
+      <li>خلايا بدون هيكل محدد</li>
+      <li>الـ Flow مش هيعرف يضيف Row</li>
+      <li>الأسماء مش معرّفة رسمياً</li>
+      <li>مش مناسب للأتمتة</li>
+    </ul>
+  </div>
+  <div class="cmp-side ok">
+    <span class="cmp-badge">Table ✅</span>
+    <h4>جدول منظم</h4>
+    <ul>
+      <li>هيكل محدد بأسماء أعمدة</li>
+      <li>الـ Flow يقدر يضيف Rows</li>
+      <li>كل عمود ليه اسم واضح</li>
+      <li>ضروري للأتمتة والـ Flows</li>
+    </ul>
+  </div>
+</div>
+
+<h3 style="font-size:18px;margin:24px 0 12px;color:var(--dark)">إزاي تحوّل Range لـ Table (خطوة بخطوة):</h3>
+<ol class="steps">
+  <li>افتح الملف في <strong>Excel Online</strong> (مش Desktop)</li>
+  <li>حدد كل البيانات (Ctrl+A)</li>
+  <li><strong>Insert → Table</strong> → علّم على <strong>My table has headers</strong></li>
+  <li>سمّي الجدول: <code>ComplaintsTable</code> (من Table Design)</li>
+  <li>احفظ الملف على <strong>OneDrive</strong></li>
+</ol>
+
+<div class="box box-warn"><h5><i class="fas fa-exclamation-triangle"></i> تحذير مهم</h5><p>لو Excel مش Table، الـ Flow مش هيلاقي مكان يضيف فيه Row. <strong>تحويل Excel لـ Table هو أهم خطوة في الإعداد.</strong></p></div>
+</section>
+
+<!-- ========== 04 ========== -->
+<section class="sec" id="s04">
+<div class="sec-head"><div class="sec-num">٠٤</div><div><h2>⚠️ Hallucination + أمان البيانات</h2><div class="sec-sub">مفاهيم حرجة قبل التعامل مع الملفات — ١٠ دقايق</div></div></div>
+
+<div class="box box-warn"><h5><i class="fas fa-exclamation-triangle"></i> Hallucination مع الأرقام</h5><p>Claude ممكن يخطئ في قراءة الأرقام الكبيرة أو يحسب حسابات غلط. لو الملف فيه 1000 صف، ممكن يخلط بين صفوف.<br><br><strong>الحل:</strong> دايماً راجع الأرقام المهمة. استخدم Claude للاستخراج والتصنيف، بس الحسابات الحساسة راجعها في Excel.</p></div>
+
+<div class="box box-security"><h5><i class="fas fa-shield-alt"></i> 🔒 أمان البيانات مع الملفات</h5>
+<p><strong>❌ مترفعش:</strong><br>
+- بيانات عملاء حقيقية (أسماء + تليفونات + عناوين)<br>
+- أرقام بطاقات أو حسابات بنكية<br>
+- معلومات سرية للشركة أو رواتب الموظفين<br>
+- كلمات مرور أو بيانات دخول<br><br>
+<strong>✅ Checklist قبل الرفع:</strong><br>
+☐ استبدل الأسماء ببيانات تجريبية<br>
+☐ احذف الأعمدة الحساسة<br>
+☐ اعمل نسخة احتياطية (Backup)<br>
+☐ حوّل الملف لـ Table<br>
+☐ تأكد إن صف العناوين واضح</p></div>
+
+<div class="golden"><p>القاعدة: أي ملف هترفعه، اسأل نفسك: "لو الملف ده وصل لحد مش المفروض يشوفه، فيه مشكلة؟" لو أيوه — نظّف الملف الأول.</p></div>
+</section>
+
+<!-- ========== 05 ========== -->
+<section class="sec" id="s05">
+<div class="sec-head"><div class="sec-num">٠٥</div><div><h2>جملة الأمان + Demo: استخراج وتعديل</h2><div class="sec-sub">القلب الحقيقي للمحاضرة — ٢٠ دقيقة</div></div></div>
+
+<p class="intro"><strong>ليه المحور ده هو الأهم؟</strong> لأنك بتتعامل مع بيانات حقيقية. لو طلبك غامض، Claude ممكن يعدّل أعمدة إنت مش قاصدها.</p>
+
+<div class="box box-danger"><h5><i class="fas fa-bomb"></i> الخطر الحقيقي</h5><p>لو كتبت <code>"نضّف الملف ده"</code> — Claude ممكن يحذف صفوف، يغيّر أعمدة، أو يضيف بيانات من عنده. في ملف فواتير حقيقي، ده ممكن يسبب خسارة مالية.</p></div>
+
+<div class="golden"><p>في كل Prompt بتتعامل فيه مع ملف حقيقي، لازم تكتب في الآخر:<br><strong style="font-size:20px">"باقي كل الأعمدة والصفوف سيبها زي ما هي بالظبط من غير أي تعديل."</strong></p></div>
+
+<div class="cmp">
+  <div class="cmp-side no"><span class="cmp-badge">Prompt غامض ❌</span><h4>من غير حماية</h4><ul><li>"نضّف الملف ده"</li><li>"عدّل البيانات"</li><li>"رتّب الملف"</li><li>النتيجة: Claude ممكن يلمس أي حاجة</li></ul></div>
+  <div class="cmp-side ok"><span class="cmp-badge">Prompt محكم ✅</span><h4>مع جملة الأمان</h4><ul><li>"في عمود الحالة، غيّر Pending لـ Completed"</li><li>"استخرج بس الفواتير فوق 5000"</li><li>"باقي كل الأعمدة سيبها زي ما هي"</li><li>النتيجة: تعديل دقيق + حماية كاملة</li></ul></div>
+</div>
+
+<div class="ex">
+  <div class="ex-head"><span class="ex-tag">مثال ١</span><h4>استخراج العملاء المتأخرين</h4></div>
+  <div class="ex-scene"><strong>السيناريو:</strong> ملف فيه 500 فاتورة. المدير عايز يعرف مين العملاء اللي فاتورتهم فوق 5,000 درهم وحالتهم "متأخر".</div>
+  <div class="sandbox"><span class="tag">[الشخصية]</span> <span class="c">أنت محلل بيانات في شركة كهرباء ومياه.</span>
+<span class="tag">[المطلوب]</span> <span class="c">من الملف المرفق، استخرج كل الصفوف اللي:</span>
+  <span class="c">- المبلغ فيها أكبر من 5,000 درهم</span>
+  <span class="c">- الحالة = "متأخر"</span>
+<span class="tag">[التنسيق]</span> <span class="c">حط النتيجة في جدول: اسم العميل، رقم العداد، المبلغ.</span>
+<span class="tag">[الأمان]</span> <span class="str">باقي الملف متلمسوش.</span>
+<span class="tag">[إضافي]</span> <span class="c">احسب إجمالي المبالغ المتأخرة.</span><button class="sandbox-copy" onclick="navigator.clipboard.writeText('أنت محلل بيانات في شركة كهرباء ومياه.\nمن الملف المرفق، استخرج كل الصفوف اللي:\n- المبلغ فيها أكبر من 5,000 درهم\n- الحالة = متأخر\nحط النتيجة في جدول: اسم العميل، رقم العداد، المبلغ.\nباقي الملف متلمسوش.\nاحسب إجمالي المبالغ المتأخرة.')">نسخ</button></div>
+  <div class="ex-result">✅ <strong>النتيجة:</strong> جدول فيه 15-30 عميل + الإجمالي. الوقت: 30 ثانية بدل 25 دقيقة يدوياً.</div>
+</div>
+
+<div class="ex">
+  <div class="ex-head"><span class="ex-tag">مثال ٢</span><h4>تعديل حالة الفواتير بأمان</h4></div>
+  <div class="ex-scene"><strong>السيناريو:</strong> عمود "الحالة" فيه صفوف "Pending" عايز تغيّرها لـ "Completed".</div>
+  <div class="sandbox"><span class="tag">[الشخصية]</span> <span class="c">أنت محلل بيانات في شركة كهرباء ومياه.</span>
+<span class="tag">[المطلوب]</span> <span class="c">في عمود "الحالة"، أي صف قيمته "Pending" غيّرها لـ "Completed".</span>
+<span class="tag">[الأمان]</span> <span class="str">باقي كل الأعمدة والصفوف سيبها زي ما هي بالظبط من غير أي تعديل.</span>
+<span class="tag">[التنسيق]</span> <span class="c">ارجعلي الملف كامل واعرضلي عدد الصفوف اللي اتغيرت.</span><button class="sandbox-copy" onclick="navigator.clipboard.writeText('أنت محلل بيانات في شركة كهرباء ومياه.\nفي عمود الحالة، أي صف قيمته Pending غيّرها لـ Completed.\nباقي كل الأعمدة والصفوف سيبها زي ما هي بالظبط من غير أي تعديل.\nارجعلي الملف كامل واعرضلي عدد الصفوف اللي اتغيرت.')">نسخ</button></div>
+  <div class="ex-result">✅ <strong>النتيجة:</strong> Claude يغيّر بس عمود الحالة، ويرجع الملف كامل.</div>
+</div>
+
+<div class="ex">
+  <div class="ex-head"><span class="ex-tag">مثال ٣</span><h4>تقرير ملخص شهري تلقائي</h4></div>
+  <div class="sandbox"><span class="tag">[الشخصية]</span> <span class="c">أنت مدير مالي في شركة كهرباء ومياه.</span>
+<span class="tag">[المطلوب]</span> <span class="c">من ملف الفواتير، اطلع تقرير مختصر فيه:</span>
+  <span class="c">1. إجمالي المبالغ (مدفوع + متأخر)</span>
+  <span class="c">2. عدد الفواتير المدفوعة والمتأخرة</span>
+  <span class="c">3. أعلى 5 عملاء في المبلغ</span>
+<span class="tag">[الأمان]</span> <span class="str">الملف الأصلي متلمسوش.</span><button class="sandbox-copy" onclick="navigator.clipboard.writeText('أنت مدير مالي في شركة كهرباء ومياه.\nمن ملف الفواتير، اطلع تقرير مختصر فيه:\n1. إجمالي المبالغ (مدفوع + متأخر)\n2. عدد الفواتير المدفوعة والمتأخرة\n3. أعلى 5 عملاء في المبلغ\nالملف الأصلي متلمسوش.')">نسخ</button></div>
+</div>
+</section>
+
+<!-- ========== 06 ========== -->
+<section class="sec" id="s06">
+<div class="sec-head"><div class="sec-num">٠٦</div><div><h2>تمرين عملي: ملفك إنت</h2><div class="sec-sub">التطبيق الفعلي — ٢٠ دقيقة</div></div></div>
+
+<p class="intro">دلوقتي دورك. هترفع ملف Excel وتكتب Prompt لاستخراج أو تعديل بيانات. <strong>استخدم جملة الأمان دايماً.</strong></p>
+
+<div class="box box-info"><h5><i class="fas fa-life-ring"></i> Plan B — لو ما عندكش ملف جاهز</h5><p>اعمل ملف Excel جديد فيه 10 صفوف:<br>
+- الأعمدة: الاسم | رقم العداد | المبلغ | الحالة<br>
+- حط 3 صفوف حالتهم "Pending" و 7 "Completed"<br>
+- حوّله لـ Table وسمّيه: TestTable<br>
+- ارفعه على Claude</p></div>
+
+<div class="drill">
+  <div class="drill-head"><h4><i class="fas fa-dumbbell"></i> تدريب ١ — استخراج بيانات</h4><span class="time-badge"><i class="fas fa-clock"></i> ٧ دقايق</span></div>
+  <ol>
+    <li>ارفع الملف على Claude</li>
+    <li>اكتب Prompt يستخرج بيانات محددة (مثلاً: صفوف فوق مبلغ معين)</li>
+    <li>تأكد إن جملة الأمان موجودة</li>
+    <li>شوف النتيجة وقارنها بالملف الأصلي</li>
+  </ol>
+</div>
+
+<div class="drill">
+  <div class="drill-head"><h4><i class="fas fa-dumbbell"></i> تدريب ٢ — تعديل بيانات</h4><span class="time-badge"><i class="fas fa-clock"></i> ٧ دقايق</span></div>
+  <ol>
+    <li>اكتب Prompt يعدّل عمود معين</li>
+    <li>تأكد إن جملة الأمان موجودة</li>
+    <li>شوف النتيجة: هل التعديل حصل بس في العمود المطلوب؟</li>
+    <li>قارن الملف قبل وبعد</li>
+  </ol>
+</div>
+
+<div class="drill">
+  <div class="drill-head"><h4><i class="fas fa-dumbbell"></i> تدريب ٣ — تقرير ملخص</h4><span class="time-badge"><i class="fas fa-clock"></i> ٦ دقايق</span></div>
+  <ol>
+    <li>اطلب من Claude يطلع تقرير ملخص من الملف</li>
+    <li>راجع الأرقام: هل دقيقة؟</li>
+    <li>تذكّر: الأرقام الحساسة لازم تتراجع يدوياً</li>
+  </ol>
+</div>
+</section>
+
+<!-- ========== 07 ========== -->
+<section class="sec" id="s07">
+<div class="sec-head"><div class="sec-num">٠٧</div><div><h2>المرجع السريع — قوالب Prompts للملفات</h2><div class="sec-sub">احتفظ بهذه الصفحة — ٢٠+ قالب جاهز</div></div></div>
+
+<h3 style="font-size:20px;margin:24px 0 14px;color:var(--dark)">أولاً: قوالب استخراج البيانات</h3>
+<table class="tbl">
+<thead><tr><th>القالب</th><th>الاستخدام</th><th>مثال من الشغل</th></tr></thead>
+<tbody>
+<tr><td><code>استخرج الصفوف اللي [الشرط]</code></td><td>تصفية</td><td>استخرج الصفوف اللي المبلغ فيها &gt; 5000</td></tr>
+<tr><td><code>احسب إجمالي [العمود] لـ [شرط]</code></td><td>حساب</td><td>احسب إجمالي المبلغ للمدفوعة</td></tr>
+<tr><td><code>قارن بين [ملف أ] و [ملف ب]</code></td><td>مقارنة</td><td>قارن فواتير يناير وفبراير</td></tr>
+<tr><td><code>استخرج أعلى [عدد] في [عمود]</code></td><td>ترتيب</td><td>أعلى 10 عملاء في الاستهلاك</td></tr>
+<tr><td><code>أوجد الصفوف المكررة في [عمود]</code></td><td>تنظيف</td><td>أرقام العدادات المكررة</td></tr>
+<tr><td><code>لخّص الملف في [عدد] نقاط</code></td><td>تلخيص</td><td>لخّص ملف الشكاوى في 5 نقاط</td></tr>
+<tr><td><code>وزّع البيانات حسب [عمود]</code></td><td>تصنيف</td><td>وزّع الفواتير حسب المنطقة</td></tr>
+<tr><td><code>احسب المتوسط والوسيط لـ [عمود]</code></td><td>إحصاء</td><td>متوسط قيمة الفاتورة</td></tr>
+</tbody>
+</table>
+
+<h3 style="font-size:20px;margin:28px 0 14px;color:var(--dark)">ثانياً: قوالب تعديل البيانات</h3>
+<table class="tbl">
+<thead><tr><th>القالب</th><th>الاستخدام</th><th>مثال من الشغل</th></tr></thead>
+<tbody>
+<tr><td><code>غيّر [قيمة] لـ [قيمة] في عمود [اسم]</code></td><td>تعديل نصي</td><td>غيّر Pending لـ Completed</td></tr>
+<tr><td><code>أضف عمود [اسم] واحسب فيه [معادلة]</code></td><td>عمود جديد</td><td>أضف "الضريبة" = المبلغ × 5%</td></tr>
+<tr><td><code>وحّد تنسيق [عمود] على شكل [شكل]</code></td><td>تنسيق</td><td>وحّد التاريخ على DD/MM/YYYY</td></tr>
+<tr><td><code>استبدل [كلمة] بـ [كلمة] في [عمود]</code></td><td>استبدال</td><td>استبدل "Abu Dhabi" بـ "أبوظبي"</td></tr>
+<tr><td><code>رتّب الجدول حسب [عمود]</code></td><td>ترتيب</td><td>رتّب حسب المبلغ تنازلي</td></tr>
+</tbody>
+</table>
+
+<div class="box box-tip"><h5><i class="fas fa-lightbulb"></i> نصيحة ذهبية</h5><p>كل قالب من دول لازم ينتهي بجملة الأمان: <strong>"باقي كل الأعمدة والصفوف سيبها زي ما هي بالظبط."</strong></p></div>
+</section>
+
+<!-- ========== 08 ========== -->
+<section class="sec" id="s08">
+<div class="sec-head"><div class="sec-num">٠٨</div><div><h2>قاموس المصطلحات</h2><div class="sec-sub">مرجع سريع — ١٥ مصطلح</div></div></div>
+
+<div class="glossary">
+  <div class="g-item"><div class="g-term">Data Extraction</div><div class="g-ar">استخراج البيانات</div><div class="g-def">أخذ معلومات محددة من ملف بدون تغيير الباقي.</div></div>
+  <div class="g-item"><div class="g-term">Data Integrity</div><div class="g-ar">سلامة البيانات</div><div class="g-def">ضمان إن البيانات الأصلية ما اتغيرتش.</div></div>
+  <div class="g-item"><div class="g-term">Header Row</div><div class="g-ar">صف العناوين</div><div class="g-def">أول صف فيه أسماء الأعمدة.</div></div>
+  <div class="g-item"><div class="g-term">Table</div><div class="g-ar">جدول Excel</div><div class="g-def">Excel منسق كجدول — ضروري للأتمتة.</div></div>
+  <div class="g-item"><div class="g-term">Safety Clause</div><div class="g-ar">جملة الأمان</div><div class="g-def">جملة بتحمي باقي البيانات من التعديل.</div></div>
+  <div class="g-item"><div class="g-term">Backup</div><div class="g-ar">نسخة احتياطية</div><div class="g-def">نسخة من الملف قبل أي تعديل.</div></div>
+  <div class="g-item"><div class="g-term">Hallucination</div><div class="g-ar">هلوسة</div><div class="g-def">لما AI يختلق معلومة غير صحيحة.</div></div>
+  <div class="g-item"><div class="g-term">Data Leakage</div><div class="g-ar">تسريب بيانات</div><div class="g-def">رفع بيانات حساسة على AI خارجي.</div></div>
+  <div class="g-item"><div class="g-term">Filter</div><div class="g-ar">تصفية</div><div class="g-def">عرض الصفوف اللي بتحقق شرط معين.</div></div>
+  <div class="g-item"><div class="g-term">Pivot Table</div><div class="g-ar">جدول محوري</div><div class="g-def">جدول بيحلّص بيانات كبيرة في ملخص.</div></div>
+  <div class="g-item"><div class="g-term">Skill</div><div class="g-ar">مهارة مخصصة</div><div class="g-def">تعليمات ثابتة في Project بتنفذ مهمة تلقائياً.</div></div>
+  <div class="g-item"><div class="g-term">Token</div><div class="g-ar">وحدة قياس النص</div><div class="g-def">وحدة حساب حجم النص والتكلفة.</div></div>
+  <div class="g-item"><div class="g-term">Validation</div><div class="g-ar">التحقق</div><div class="g-def">التأكد إن البيانات صحيحة ومفيش أخطاء.</div></div>
+  <div class="g-item"><div class="g-term">Template</div><div class="g-ar">قالب</div><div class="g-def">Prompt جاهز بتغيّر فيه التفاصيل بس.</div></div>
+  <div class="g-item"><div class="g-term">AED</div><div class="g-ar">درهم إماراتي</div><div class="g-def">العملة الرسمية — حددها دايماً في الـ Prompt.</div></div>
+</div>
+</section>
+
+<!-- ========== 09 ========== -->
+<section class="sec" id="s09">
+<div class="sec-head"><div class="sec-num">٠٩</div><div><h2>Free vs Paid + توفير التوكنز</h2><div class="sec-sub">إدارة الرصيد بذكاء — ١٠ دقايق</div></div></div>
+
+<table class="tbl">
+<thead><tr><th>الميزة</th><th>Free</th><th>Pro ($20/شهر)</th></tr></thead>
+<tbody>
+<tr><td><strong>عدد الرسائل</strong></td><td>محدود يومياً (~20-30)</td><td>غير محدود تقريباً</td></tr>
+<tr><td><strong>عدد المشاريع</strong></td><td>3 Projects</td><td>غير محدود</td></tr>
+<tr><td><strong>سرعة الرد</strong></td><td>عادي</td><td>أسرع</td></tr>
+<tr><td><strong>رفع ملفات</strong></td><td>محدود (~10MB)</td><td>غير محدود (~50MB)</td></tr>
+</tbody>
+</table>
+
+<div class="cards">
+  <div class="card"><div class="card-icon">📁</div><h4>استخدم Projects</h4><p>التعليمات الثابتة بتتحفظ مرة واحدة — مش بتتكرر في كل شات.</p></div>
+  <div class="card"><div class="card-icon">⚡</div><h4>اطلب ردود مختصرة</h4><p>"رد في 3 أسطر بس" أو "جدول بدون شرح" بتوفر 40% من التوكنز.</p></div>
+  <div class="card"><div class="card-icon">🎯</div><h4>حدد المطلوب بالظبط</h4><p>Prompt واضح = رد أقصر = توكنز أقل.</p></div>
+</div>
+
+<div class="box box-tip"><h5><i class="fas fa-lightbulb"></i> الخلاصة</h5><p>لو بتستخدم Claude أكتر من ساعة يومياً في شغل حقيقي، الـ Pro يستاهل. لو بيوفرلك ساعة يومياً، هو بيوفّر عليك أكتر من سعره.</p></div>
+</section>
+
+<!-- ========== 10 ========== -->
+<section class="sec" id="s10">
+<div class="sec-head"><div class="sec-num">١٠</div><div><h2>التدريب الختامي والواجب</h2><div class="sec-sub">تطبيق شامل — آخر ١٠ دقايق</div></div></div>
+
+<div class="drill">
+  <div class="drill-head"><h4><i class="fas fa-trophy"></i> تدريب ختامي — ٣ مهام على ملف حقيقي</h4><span class="time-badge"><i class="fas fa-clock"></i> ١٥ دقيقة</span></div>
+  <ol>
+    <li>افتح ملف Excel من شغلك وارفعه على Claude</li>
+    <li><strong>المهمة ١:</strong> استخراج بيانات محددة (فواتير فوق مبلغ معين)</li>
+    <li><strong>المهمة ٢:</strong> تعديل عمود مع جملة الأمان</li>
+    <li><strong>المهمة ٣:</strong> تقرير ملخص من الملف</li>
+    <li>راجع الأرقام — تأكد إن مفيش Hallucination</li>
+    <li>احسب الوقت اللي وفرته</li>
+  </ol>
+</div>
+
+<div class="hw">
+  <h4><i class="fas fa-clipboard-check"></i> الواجب البيتي — سلّميه في المحاضرة الجاية</h4>
+  <ul class="hw-list">
+    <li>جهّز نسخة تجريبية من ملف Excel بتشتغل عليه يومياً (نظّف البيانات الحساسة)</li>
+    <li>حوّله لـ Table واحفظه على OneDrive</li>
+    <li>طوّر الـ Project بـ 3 Skills ثابتة لمهامك اليومية</li>
+    <li>جرّب 3 قوالب من المرجع السريع على ملفات حقيقية</li>
+    <li>احسب الوقت اللي وفرته في كل مهمة (دقايق × مرات التكرار)</li>
+  </ul>
+</div>
+
+<div class="quiz">
+  <h4><i class="fas fa-question-circle"></i> أسئلة المراجعة الذاتية — نظرية</h4>
+  <div class="quiz-q"><b>١.</b> ما هي "جملة الأمان" وليه ضرورية؟</div>
+  <div class="quiz-q"><b>٢.</b> إيه الفرق بين Range وTable في Excel؟</div>
+  <div class="quiz-q"><b>٣.</b> إيه Hallucination وليه خطر مع الأرقام؟</div>
+  <div class="quiz-q"><b>٤.</b> إيه الـ Checklist قبل رفع أي ملف؟</div>
+  <div class="quiz-q"><b>٥.</b> إيه الفرق بين الشات العادي والـ Project من ناحية التوكنز؟</div>
+</div>
+
+<div class="quiz">
+  <h4><i class="fas fa-keyboard"></i> أسئلة المراجعة الذاتية — عملية</h4>
+  <div class="quiz-q"><b>١.</b> اكتب Prompt يستخرج العملاء اللي فاتورتهم فوق 10,000 درهم مع جملة الأمان.</div>
+  <div class="quiz-q"><b>٢.</b> اكتب Prompt يعدّل عمود الحالة من Pending لـ Completed مع حماية الباقي.</div>
+  <div class="quiz-q"><b>٣.</b> اكتب Prompt يطلع تقرير ملخص شهري من ملف فواتير.</div>
+  <div class="quiz-q"><b>٤.</b> حوّل ملف Excel عادي لـ Table وسمّيه.</div>
+  <div class="quiz-q"><b>٥.</b> نظّف ملف من البيانات الحساسة قبل الرفع.</div>
+</div>
+
+<div class="box box-info"><h5><i class="fas fa-rocket"></i> استعداد للمحاضرة الجاية</h5><p>في المحاضرة الثالثة، هنبدأ <strong>Power Automate</strong> — Trigger + Action + Condition + أول Flow عملي. جهّز ملفاتك وكن مستعد!</p></div>
+</section>
+
+</div>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+<div class="footer-grid">
+  <div><h5>عن الأكاديمية</h5><p>Sunshine T Academy — منصة تدريب متخصص في الذكاء الاصطناعي وأتمتة العمليات لموظفي الشركات. كورسات عملية 100% بدون نظريات مجردة.</p></div>
+  <div><h5>تواصل معنا</h5><a href="tel:01080680930">📞 01080680930</a><a href="#">📧 info@sunshinetacademy.com</a><a href="#">💬 WhatsApp Support</a></div>
+  <div><h5>الكورس الحالي</h5><p>AI Automation for Professionals</p><p>6 محاضرات · 12 ساعة · 1,800 جنيه</p><p>المدرب: م. أحمد (END \ AHMED)</p></div>
+</div>
+<div class="footer-bottom">© 2025 <span class="brand">Sunshine T Academy</span> · جميع الحقوق محفوظة · AI Automation for Professionals · Lecture 02 / 06 · م. أحمد</div>
+</footer>
+
+<script>
+document.querySelectorAll('.toc-grid li').forEach((item,i)=>{
+  item.addEventListener('click',()=>{
+    const t=document.getElementById('s0'+(i+1));
+    if(t) t.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting) e.target.style.animation='fadeUp .5s ease';});
+},{threshold:0.08});
+document.querySelectorAll('.sec').forEach(s=>obs.observe(s));
+const style=document.createElement('style');
+style.textContent='@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}';
+document.head.appendChild(style);
+</script>
+</body>
+</html>
